@@ -83,11 +83,11 @@ class NeuralNetwork:
 		average_over_generations = np.mean(self.__average_fitness_scores)
 
 		print(Fore.GREEN, 'Generation', self.__generation, Fore.RESET)
-		print(Fore.BLUE, 'Current: ', Fore.RESET, current_fitness)
-		print(Fore.BLUE, 'Mutants Average: ', Fore.RESET, average_fitness,
-			Fore.BLUE, ' Best: ', Fore.RESET, best_fitness,
-			Fore.BLUE, ' Worst: ', Fore.RESET, worst_fitness,
-			Fore.BLUE, ' Average (Last 100 Gen): ', Fore.RESET, average_over_generations)
+		print(Fore.BLUE, 'Current: ', Fore.RESET, '%.3f' % current_fitness)
+		print(Fore.BLUE, 'Mutants Average: ', Fore.RESET, '%.3f' % average_fitness,
+			Fore.BLUE, ' Best: ', Fore.RESET, '%.3f' % best_fitness,
+			Fore.BLUE, ' Worst: ', Fore.RESET, '%.3f' % worst_fitness,
+			Fore.BLUE, ' Average (Last 100 Gen): ', Fore.RESET, '%.3f' % average_over_generations)
 
 		self.__generation_list.append(self.__generation)
 		self.__current_fitness_list.append(current_fitness)

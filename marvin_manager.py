@@ -25,7 +25,7 @@ class MarvinManager:
 		for episode in range(n_episodes):
 			print(Style.BRIGHT, 'Episode: ', episode + 1, Style.RESET_ALL)
 			total_reward = self.__run_simulation(t_max=None)
-			print('  Total reward = ', total_reward)
+			print('  Total reward = %.3f' % total_reward)
 
 	def __run_simulation(self, t_max):
 		total_reward = 0

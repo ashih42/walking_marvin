@@ -45,7 +45,7 @@ def parse_options():
 		options['train'] = True
 		options['walk'] = True
 	else:
-		i = 0
+		i = 1
 		while i < len(sys.argv):
 			flag = sys.argv[i]
 			if flag == '--help' or flag == '-h':
@@ -81,6 +81,8 @@ def parse_options():
 				i += 1
 			elif flag == '--bipedal' or flag == '-b':
 				options['env'] = 'BipedalWalker-v2'
+			else:
+				exit_with_usage_message()
 			i += 1
 	return options
 
