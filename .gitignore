@@ -1,0 +1,9 @@
+.DS_Store
+._*
+*.pdf
+__pycache__
+references
+temp.dat
+temp.dat.png
+Default.png
+notes.txt

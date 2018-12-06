@@ -1,0 +1,29 @@
+Bonus:
+
+- Additional program options!
+  -e to set number of episodes for training and walking
+  -m to set t_max for training
+  -z to set seed for the gym environment
+  -b to run BipedalWalker-v2 instead
+
+- Beautiful logs!
+- Wonderful plots!
+
+- Cool collection of neural network saved states!
+- They come with plots too!
+
+- Phat-ass UML class diagram!
+- Illustrative neural network architecture diagram!
+
+
+
+
+
+
+
+
+
+
+
+
+
