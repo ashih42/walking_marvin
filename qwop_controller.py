@@ -1,7 +1,7 @@
 from pynput.keyboard import Key, Listener
 import numpy as np
 
-class QWOP_Controller:
+class Extreme_QWOP_Controller:
 
 	def __init__(self):
 		self.reset()
@@ -9,36 +9,32 @@ class QWOP_Controller:
 		listener.start()
 
 	def reset(self):
-		self.q_value = 0.0
-		self.w_value = 0.0
-		self.o_value = 0.0
-		self.p_value = 0.0
+		self.__action = np.zeros(4)
 
-	def predict(self, state):
-		return np.array([self.q_value, self.w_value, self.o_value, self.p_value])
+	def get_action(self):
+		return self.__action
 		
 	def on_press(self, key):
 		if key == Key.alt:
-			self.q_value = 1.0
+			self.__action[0] = 1.0
 		elif key == Key.cmd:
-			self.w_value = 1.0
+			self.__action[1] = 1.0
 		elif key == Key.ctrl_r:
-			self.o_value = 1.0
+			self.__action[2] = 1.0
 		elif key == Key.shift_r:
-			self.p_value = 1.0
+			self.__action[3] = 1.0
 
 	def on_release(self, key):
 		if key == Key.alt:
-			self.q_value = -1.0
+			self.__action[0] = -1.0
 		elif key == Key.cmd:
-			self.w_value = -1.0
+			self.__action[1] = -1.0
 		elif key == Key.ctrl_r:
-			self.o_value = -1.0
+			self.__action[2] = -1.0
 		elif key == Key.shift_r:
-			self.p_value = -1.0
+			self.__action[3] = -1.0
 
-
-class QWOP_Controller2:
+class Easy_QWOP_Controller:
 
 	def __init__(self):
 		self.reset()
@@ -46,43 +42,36 @@ class QWOP_Controller2:
 		listener.start()
 
 	def reset(self):
-		self.action = np.zeros(4)
-		self.joint_state = np.zeros(4).astype(bool)
+		self.__action = np.zeros(4)
+		self.__turn_direction = np.zeros(4).astype(bool)
 
-	def predict(self, state):
-		self.action[0] += -0.2 + self.joint_state[0] * 0.4
-		self.action[1] += -0.2 + self.joint_state[1] * 0.4
-		self.action[2] += 0.2 + self.joint_state[2] * -0.4
-		self.action[3] += 0.2 + self.joint_state[3] * -0.4
-		self.action = np.clip(self.action, -1.0, 1.0)
-		return self.action
+	def get_action(self):
+		self.__update_action()
+		return self.__action
+
+	def __update_action(self):
+		self.__action[0] += -0.2 + self.__turn_direction[0] * 0.4
+		self.__action[1] += -0.2 + self.__turn_direction[1] * 0.4
+		self.__action[2] += 0.2 + self.__turn_direction[2] * -0.4
+		self.__action[3] += 0.2 + self.__turn_direction[3] * -0.4
+		self.__action = np.clip(self.__action, -1.0, 1.0)
 
 	def on_press(self, key):
 		if key == Key.alt:
-			self.joint_state[0] = True
+			self.__turn_direction[0] = True
 		elif key == Key.cmd:
-			self.joint_state[1] = True
+			self.__turn_direction[1] = True
 		elif key == Key.ctrl_r:
-			self.joint_state[2] = True
+			self.__turn_direction[2] = True
 		elif key == Key.shift_r:
-			self.joint_state[3] = True
+			self.__turn_direction[3] = True
 
 	def on_release(self, key):
 		if key == Key.alt:
-			self.joint_state[0] = False
+			self.__turn_direction[0] = False
 		elif key == Key.cmd:
-			self.joint_state[1] = False
+			self.__turn_direction[1] = False
 		elif key == Key.ctrl_r:
-			self.joint_state[2] = False
+			self.__turn_direction[2] = False
 		elif key == Key.shift_r:
-			self.joint_state[3] = False
-
-
-
-
-
-
-
-
-
-
+			self.__turn_direction[3] = False

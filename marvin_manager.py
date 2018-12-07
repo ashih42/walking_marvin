@@ -4,14 +4,13 @@ import gym
 import envs
 
 from evolution import NeuralNetwork
-from qwop_controller import QWOP_Controller2
+from qwop_controller import Easy_QWOP_Controller, Extreme_QWOP_Controller
 
 class MarvinManager:
+
 	def __init__(self, env_name):
 		self.__env = gym.make(env_name)
 		self.__model = NeuralNetwork(self.__env)
-
-		
 
 	def set_seed(self, seed):
 		self.__env.seed(seed)
@@ -30,26 +29,24 @@ class MarvinManager:
 			total_reward = self.__run_simulation(t_max=None)
 			print('  Total reward = %.3f' % total_reward)
 
-	def qwop(self, n_episodes):
-		self.__controller = QWOP_Controller2()
-
+	def qwop(self, n_episodes, is_extreme):
+		self.__controller = Extreme_QWOP_Controller() if is_extreme else Easy_QWOP_Controller()
 		for episode in range(n_episodes):
 			print(Style.BRIGHT, 'Episode: ', episode + 1, Style.RESET_ALL)
-			total_reward = self.__qwop_simulation(t_max=None)
+			total_reward = self.__qwop_simulation()
 			print('  Total reward = %.3f' % total_reward)
 
-	def __qwop_simulation(self, t_max):
+	def __qwop_simulation(self):
 		self.__controller.reset()
 		total_reward = 0
 		state = self.__env.reset()
-		if t_max is None:
-			while True:
-				self.__env.render(mode='human')
-				action = self.__controller.predict(state)
-				state, reward, done, info = self.__env.step(action)
-				total_reward += reward
-				if done:
-					break
+		while True:
+			self.__env.render(mode='human')
+			action = self.__controller.get_action()
+			state, reward, done, info = self.__env.step(action)
+			total_reward += reward
+			if done:
+				break
 		self.__env.close()
 		return total_reward
 

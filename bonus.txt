@@ -5,6 +5,8 @@ Bonus:
   -m to set t_max for training
   -z to set seed for the gym environment
   -b to run BipedalWalker-v2 instead
+  -q to play QWOP
+  -x to play EXTREME QWOP
 
 - Beautiful logs!
 - Wonderful plots!
