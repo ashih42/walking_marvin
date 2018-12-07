@@ -17,6 +17,7 @@ def exit_with_usage_message():
 	print('\t --load (-l) file')
 	print('\t --save (-s) file')
 	print('\t --bipedal (-b) \t\t (run BipedalWalker-v2 instead)')
+	print('\t --qwop (-q) \t\t\t (play QWOP)')
 	sys.exit(0)
 
 # must be a positive integer
@@ -39,7 +40,8 @@ def parse_options():
 		'seed': None,
 		'load': None,
 		'save': None,
-		'env': 'Marvin-v0'
+		'env': 'Marvin-v0',
+		'qwop': False
 	}
 	if len(sys.argv) == 1:
 		options['train'] = True
@@ -81,6 +83,8 @@ def parse_options():
 				i += 1
 			elif flag == '--bipedal' or flag == '-b':
 				options['env'] = 'BipedalWalker-v2'
+			elif flag == '--qwop' or flag == '-q':
+				options['qwop'] = True
 			else:
 				exit_with_usage_message()
 			i += 1
@@ -101,7 +105,9 @@ def main():
 		if options['save'] is not None:
 			marvin_manager.set_filename(options['save'])
 
-		if options['train']:
+		if options['qwop']:
+			marvin_manager.qwop(n_episodes=options['episodes'])
+		elif options['train']:
 			marvin_manager.train(
 				n_episodes=options['episodes'],
 				t_max=options['t_max'],
