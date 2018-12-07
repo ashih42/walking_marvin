@@ -4,9 +4,10 @@ Bonus:
   -e to set number of episodes for training and walking
   -m to set t_max for training
   -z to set seed for the gym environment
-  -b to run BipedalWalker-v2 instead
+  -b to run BipedalWalker-v2
+  -bh to run BipedalWalkerHardcore-v2
   -q to play QWOP
-  -x to play EXTREME QWOP
+  -qx to play EXTREME QWOP
 
 - Beautiful logs!
 - Wonderful plots!
