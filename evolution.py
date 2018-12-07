@@ -29,15 +29,14 @@ class NeuralNetwork:
 
 	def __init__(self, env):
 		self.env = env
+		self.filename = 'Default'
 		
 		self.__generation = 0
-		self.__average_fitness_scores = []
+		self.__average_mutant_scores = []
 		self.__generation_list = []
 		self.__current_fitness_list = []
 		self.__average_fitness_per_generation_list = []
 		self.__average_fitness_over_generations_list = []
-
-		self.filename = 'Default'
 
 		self.Theta_1 = np.zeros((25, 24))
 		self.Theta_2 = np.zeros((25, 24))
@@ -64,50 +63,14 @@ class NeuralNetwork:
 		return A_4.flatten()
 
 	def evolve(self, t_max):
+		self.__generation += 1
 		mutants = [ None ] * self.__N_MUTANTS
-		fitness_scores = np.empty(self.__N_MUTANTS)
-		current_fitness = self.__get_fitness(t_max)
-
+		mutant_scores = np.empty(self.__N_MUTANTS)
 		for i in range(self.__N_MUTANTS):
 			mutants[i] = self.__mutate()
-			fitness_scores[i] = mutants[i].__get_fitness(t_max)
-
-		best_fitness = np.max(fitness_scores)
-		worst_fitness = np.min(fitness_scores)
-		average_fitness = np.mean(fitness_scores)
-
-		self.__average_fitness_scores.append(average_fitness)
-		if len(self.__average_fitness_scores) > self.__SCORE_CACHE_SIZE:
-			del self.__average_fitness_scores[0]
-
-		average_over_generations = np.mean(self.__average_fitness_scores)
-
-		print(Fore.GREEN, 'Generation', self.__generation, Fore.RESET)
-		print(Fore.BLUE, 'Current: ', Fore.RESET, '%.3f' % current_fitness)
-		print(Fore.BLUE, 'Mutants Average: ', Fore.RESET, '%.3f' % average_fitness,
-			Fore.BLUE, ' Best: ', Fore.RESET, '%.3f' % best_fitness,
-			Fore.BLUE, ' Worst: ', Fore.RESET, '%.3f' % worst_fitness,
-			Fore.BLUE, ' Average (Last 100 Gen): ', Fore.RESET, '%.3f' % average_over_generations)
-
-		self.__generation_list.append(self.__generation)
-		self.__current_fitness_list.append(current_fitness)
-		self.__average_fitness_per_generation_list.append(average_fitness)
-		self.__average_fitness_over_generations_list.append(average_over_generations)
-
-		std = (fitness_scores - np.mean(fitness_scores)) / np.std(fitness_scores)
-
-		Grad_1 = np.zeros(self.Theta_1.shape)
-		Grad_2 = np.zeros(self.Theta_2.shape)
-		Grad_3 = np.zeros(self.Theta_3.shape)
-		for i in range(self.__N_MUTANTS):
-			Grad_1 += mutants[i].Theta_1 * std[i]
-			Grad_2 += mutants[i].Theta_2 * std[i]
-			Grad_3 += mutants[i].Theta_3 * std[i]
-		self.Theta_1 += self.__LEARNING_RATE / (self.__N_MUTANTS * self.__SIGMA) * Grad_1
-		self.Theta_2 += self.__LEARNING_RATE / (self.__N_MUTANTS * self.__SIGMA) * Grad_2
-		self.Theta_3 += self.__LEARNING_RATE / (self.__N_MUTANTS * self.__SIGMA) * Grad_3
-		
-		self.__generation += 1
+			mutant_scores[i] = mutants[i].__get_fitness(t_max)
+		self.__measure_mutants_performance(t_max, mutant_scores)
+		self.__update_parent_from_mutants(mutants, mutant_scores)
 
 	def __mutate(self):
 		mutant = NeuralNetwork(self.env)
@@ -127,6 +90,41 @@ class NeuralNetwork:
 				if done:
 					break
 		return total_reward
+
+	def __measure_mutants_performance(self, t_max, mutant_scores):
+		current_fitness = self.__get_fitness(t_max)
+		best_fitness = np.max(mutant_scores)
+		worst_fitness = np.min(mutant_scores)
+		average_fitness = np.mean(mutant_scores)
+
+		self.__average_mutant_scores.append(average_fitness)
+		if len(self.__average_mutant_scores) > self.__SCORE_CACHE_SIZE:
+			del self.__average_mutant_scores[0]
+		average_over_generations = np.mean(self.__average_mutant_scores)
+
+		print(Fore.GREEN, 'Generation', self.__generation, Fore.RESET)
+		print(Fore.BLUE, 'Current: ', Fore.RESET, '%.3f' % current_fitness)
+		print(Fore.BLUE, 'Mutants Average: ', Fore.RESET, '%.3f' % average_fitness,
+			Fore.BLUE, ' Best: ', Fore.RESET, '%.3f' % best_fitness,
+			Fore.BLUE, ' Worst: ', Fore.RESET, '%.3f' % worst_fitness,
+			Fore.BLUE, ' Average (Last 100 Gen): ', Fore.RESET, '%.3f' % average_over_generations)
+		self.__generation_list.append(self.__generation)
+		self.__current_fitness_list.append(current_fitness)
+		self.__average_fitness_per_generation_list.append(average_fitness)
+		self.__average_fitness_over_generations_list.append(average_over_generations)
+
+	def __update_parent_from_mutants(self, mutants, mutant_scores):
+		std = (mutant_scores - np.mean(mutant_scores)) / np.std(mutant_scores)
+		Grad_1 = np.zeros(self.Theta_1.shape)
+		Grad_2 = np.zeros(self.Theta_2.shape)
+		Grad_3 = np.zeros(self.Theta_3.shape)
+		for i in range(self.__N_MUTANTS):
+			Grad_1 += mutants[i].Theta_1 * std[i]
+			Grad_2 += mutants[i].Theta_2 * std[i]
+			Grad_3 += mutants[i].Theta_3 * std[i]
+		self.Theta_1 += self.__LEARNING_RATE / (self.__N_MUTANTS * self.__SIGMA) * Grad_1
+		self.Theta_2 += self.__LEARNING_RATE / (self.__N_MUTANTS * self.__SIGMA) * Grad_2
+		self.Theta_3 += self.__LEARNING_RATE / (self.__N_MUTANTS * self.__SIGMA) * Grad_3
 
 	def save_plots(self):
 		self.__init_plots()
