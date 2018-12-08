@@ -29,27 +29,6 @@ class MarvinManager:
 			total_reward = self.__run_simulation(t_max=None)
 			print('  Total reward = %.3f' % total_reward)
 
-	def qwop(self, n_episodes, is_extreme):
-		self.__controller = Extreme_QWOP_Controller() if is_extreme else Easy_QWOP_Controller()
-		for episode in range(n_episodes):
-			print(Style.BRIGHT, 'Episode: ', episode + 1, Style.RESET_ALL)
-			total_reward = self.__qwop_simulation()
-			print('  Total reward = %.3f' % total_reward)
-
-	def __qwop_simulation(self):
-		self.__controller.reset()
-		total_reward = 0
-		state = self.__env.reset()
-		while True:
-			self.__env.render(mode='human')
-			action = self.__controller.get_action()
-			state, reward, done, info = self.__env.step(action)
-			total_reward += reward
-			if done:
-				break
-		self.__env.close()
-		return total_reward
-
 	def __run_simulation(self, t_max):
 		total_reward = 0
 		state = self.__env.reset()
@@ -69,6 +48,27 @@ class MarvinManager:
 				total_reward += reward
 				if done:
 					break
+		self.__env.close()
+		return total_reward
+
+	def qwop(self, n_episodes, is_extreme):
+		self.__controller = Extreme_QWOP_Controller() if is_extreme else Easy_QWOP_Controller()
+		for episode in range(n_episodes):
+			print(Style.BRIGHT, 'Episode: ', episode + 1, Style.RESET_ALL)
+			total_reward = self.__qwop_simulation()
+			print('  Total reward = %.3f' % total_reward)
+
+	def __qwop_simulation(self):
+		self.__controller.reset()
+		total_reward = 0
+		state = self.__env.reset()
+		while True:
+			self.__env.render(mode='human')
+			action = self.__controller.get_action()
+			state, reward, done, info = self.__env.step(action)
+			total_reward += reward
+			if done:
+				break
 		self.__env.close()
 		return total_reward
 

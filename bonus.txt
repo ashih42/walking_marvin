@@ -13,20 +13,8 @@ Bonus:
 - Wonderful plots!
 
 - Cool collection of neural network saved states!
-- They come with plots too!
+- They come with history/plots too!
 
 - Phat-ass UML class diagram!
 - Illustrative neural network architecture diagram!
-
-
-
-
-
-
-
-
-
-
-
-
 

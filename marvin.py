@@ -11,8 +11,8 @@ def exit_with_usage_message():
 	print('\t --help (-h)')
 	print('\t --train (-t)')
 	print('\t --walk (-w)')
-	print('\t --episodes (-e) n_episodes \t (must be a positive integer, default = 10)')
-	print('\t --t_max (-m) t_max \t\t (must be a positive integer, default = 200)')
+	print('\t --episodes (-e) n_episodes \t (must be a positive integer, default: 10)')
+	print('\t --t_max (-m) t_max \t\t (must be a positive integer, default: 200)')
 	print('\t --seed (-z) seed \t\t (must be a positive integer)')
 	print('\t --load (-l) file')
 	print('\t --save (-s) file')
@@ -117,10 +117,7 @@ def main():
 		elif options['qwop']:
 			marvin_manager.qwop(n_episodes=options['episodes'], is_extreme=False)
 		elif options['train']:
-			marvin_manager.train(
-				n_episodes=options['episodes'],
-				t_max=options['t_max'],
-				also_walk=options['walk'])
+			marvin_manager.train(n_episodes=options['episodes'], t_max=options['t_max'], also_walk=options['walk'])
 		elif options['walk']:
 			marvin_manager.walk(n_episodes=options['episodes'])
 
