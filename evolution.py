@@ -44,7 +44,7 @@ class NeuralNetwork:
 
 	# input X is np.array of shape (24,)
 	# output is np.array of shape (4, )
-	def predict(self, X):
+	def get_action(self, X):
 		X = X[np.newaxis, :]
 
 		A_1 = np.tanh(X)
@@ -62,7 +62,7 @@ class NeuralNetwork:
 		A_4 = np.tanh(A_4)
 		return A_4.flatten()
 
-	def evolve(self, t_max):
+	def train(self, t_max):
 		self.__generation += 1
 		mutants = [ None ] * self.__N_MUTANTS
 		mutant_scores = np.empty(self.__N_MUTANTS)
@@ -84,7 +84,7 @@ class NeuralNetwork:
 		for episode in range(n_episodes):
 			state = self.env.reset()
 			for t in range(t_max):
-				action = self.predict(state)
+				action = self.get_action(state)
 				state, reward, done, info = self.env.step(action)
 				total_reward += reward
 				if done:

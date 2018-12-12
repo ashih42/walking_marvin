@@ -18,7 +18,7 @@ class MarvinManager:
 	def train(self, n_episodes, t_max, also_walk):
 		for episode in range(n_episodes):
 			print(Style.BRIGHT, 'Episode: ', episode + 1, Style.RESET_ALL)
-			self.__model.evolve(t_max)
+			self.__model.train(t_max)
 			if also_walk:
 				self.__run_simulation(t_max)
 		self.__model.save_plots()
@@ -35,7 +35,7 @@ class MarvinManager:
 		if t_max is None:
 			while True:
 				self.__env.render(mode='human')
-				action = self.__model.predict(state)
+				action = self.__model.get_action(state)
 				state, reward, done, info = self.__env.step(action)
 				total_reward += reward
 				if done:
@@ -43,7 +43,7 @@ class MarvinManager:
 		else:
 			for t in range(t_max):
 				self.__env.render(mode='human')
-				action = self.__model.predict(state)
+				action = self.__model.get_action(state)
 				state, reward, done, info = self.__env.step(action)
 				total_reward += reward
 				if done:
