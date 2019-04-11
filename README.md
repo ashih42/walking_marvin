@@ -21,21 +21,22 @@ You are on macOS with `python3` installed.
 
 ### Training
 ```
-python3 marvin.py -t [-e n_episodes] [-l old_file] [-s new_file]
+python3 marvin.py -t [-l old_file] [-m t_max] [-e n_episodes] [-s new_file]
 ```
-* Load save from `old_file`
-* Train for `n_espidoes`
-* Save afterwards in `new_file`
+* Load save from `old_file`.
+* `-m` Set `t_max` for training (200 by default)
+* Train for `n_espidoes` (10 by default).
+* Save afterwards in `new_file`.
 
 ### Walking
 ```
 python3 marvin.py -w [-e n_episodes] [-l old_file]
 ```
-* Load save from `old_file`
-* Walk for `n_episodes`
+* Load save from `old_file`.
+* Walk for `n_episodes` (10 by default).
 
 ### Other Options
-
+* `-z seed` Set `seed` value for environment.
 * `-b` Run [BipedalWalker-v2](https://gym.openai.com/envs/BipedalWalker-v2/) instead.
 * `-bh` Run [BipedalWalkerHardcore-v2](https://gym.openai.com/envs/BipedalWalkerHardcore-v2/) instead.
 * `-q` Play [QWOP](http://www.foddy.net/Athletics.html).
