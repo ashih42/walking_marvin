@@ -23,6 +23,7 @@ You are on macOS with `python3` installed.
 ```
 python3 marvin.py -t [-l old_file] [-m t_max] [-e n_episodes] [-s new_file]
 ```
+* `-t` Train.
 * `-l old_file` Load save from `old_file`.
 * `-m t_max` Set `t_max` for training (200 by default)
 * `-e n_episodes` Train for `n_espidoes` (10 by default).
@@ -32,6 +33,7 @@ python3 marvin.py -t [-l old_file] [-m t_max] [-e n_episodes] [-s new_file]
 ```
 python3 marvin.py -w [-e n_episodes] [-l old_file]
 ```
+* `-w` Walk.
 * `-l old_file` Load save from `old_file`.
 * `-e n_episodes` Walk for `n_episodes` (10 by default).
 
