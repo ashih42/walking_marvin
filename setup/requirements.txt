@@ -1,0 +1,5 @@
+colorama
+gym
+matplotlib
+numpy
+pynput

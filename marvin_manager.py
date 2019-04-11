@@ -1,7 +1,7 @@
 from colorama import Fore, Back, Style
-import pickle
 import gym
 import envs
+import pickle
 
 from evolution import NeuralNetwork
 from qwop_controller import Easy_QWOP_Controller, Extreme_QWOP_Controller
@@ -82,7 +82,6 @@ class MarvinManager:
 		self.__model.filename = filename
 
 	def save(self, filename):
-		print('Saving model parameters in ' + Fore.BLUE + filename + Fore.RESET)
-		del self.__model.env
-		with open(filename, 'wb') as file:
-			pickle.dump(self.__model, file)
+		path = 'saves/' + filename + '.dat'
+		print('Saving model parameters in ' + Fore.BLUE + path + Fore.RESET)
+		self.__model.save(path)

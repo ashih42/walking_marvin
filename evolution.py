@@ -4,6 +4,7 @@ import numpy as np
 import os
 import gym
 import envs
+import pickle
 
 '''
 
@@ -25,7 +26,7 @@ class NeuralNetwork:
 	__SIGMA = 0.1
 	__N_MUTANTS = 10
 	__SCORE_CACHE_SIZE = 100
-	__PLOTS_DIRECTORY = 'Evolution_Plots/'
+	__PLOTS_DIRECTORY = 'plots/'
 
 	def __init__(self, env):
 		self.env = env
@@ -127,43 +128,46 @@ class NeuralNetwork:
 		self.Theta_3 += self.__LEARNING_RATE / (self.__N_MUTANTS * self.__SIGMA) * Grad_3
 
 	def save_plots(self):
-		self.__init_plots()
-		self.__update_plots()
-		self.__save_plots()
-		
-	def __init_plots(self):
+		ax_1, ax_2, ax_3 = self.__init_plots()
+		self.__update_plots(ax_1, ax_2, ax_3)
+
 		try:
 			os.stat(self.__PLOTS_DIRECTORY)
 		except:
 			os.mkdir(self.__PLOTS_DIRECTORY)
-		self.__fig = plt.figure(figsize=(18, 6))
-		self.__fig.tight_layout()
-		self.__ax_1 = self.__fig.add_subplot(1, 3, 1)
-		self.__ax_2 = self.__fig.add_subplot(1, 3, 2)
-		self.__ax_3 = self.__fig.add_subplot(1, 3, 3)
-
-	def __update_plots(self):
-		# Current Fitness
-		self.__ax_1.clear()
-		self.__ax_1.plot(self.__generation_list, self.__current_fitness_list)
-		self.__ax_1.set_xlabel('Generation')
-		self.__ax_1.set_ylabel('Fitness')
-		self.__ax_1.set_title('Current Fitness')
-		# Mutants Average Fitness
-		self.__ax_2.clear()
-		self.__ax_2.plot(self.__generation_list, self.__average_fitness_per_generation_list)
-		self.__ax_2.set_xlabel('Generation')
-		self.__ax_2.set_ylabel('Fitness')
-		self.__ax_2.set_title('Mutants Average Fitness')
-		# Average Fitness over Generations
-		self.__ax_3.clear()
-		self.__ax_3.plot(self.__generation_list, self.__average_fitness_over_generations_list)
-		self.__ax_3.set_xlabel('Generation')
-		self.__ax_3.set_ylabel('Fitness')
-		self.__ax_3.set_title('Average of Mutants Average Fitness\n(Last 100 Generations)')
-
-	def __save_plots(self):
 		filename = self.__PLOTS_DIRECTORY + self.filename + '.png'
 		plt.savefig(filename)
 		print('Saved plots in ' + Fore.BLUE + filename + Fore.RESET)
 		
+	def __init_plots(self):
+		fig = plt.figure(figsize=(18, 6))
+		fig.tight_layout()
+		ax_1 = fig.add_subplot(1, 3, 1)
+		ax_2 = fig.add_subplot(1, 3, 2)
+		ax_3 = fig.add_subplot(1, 3, 3)
+		return ax_1, ax_2, ax_3
+
+	def __update_plots(self, ax_1, ax_2, ax_3):
+		# Current Fitness
+		ax_1.clear()
+		ax_1.plot(self.__generation_list, self.__current_fitness_list)
+		ax_1.set_xlabel('Generation')
+		ax_1.set_ylabel('Fitness')
+		ax_1.set_title('Current Fitness')
+		# Mutants Average Fitness
+		ax_2.clear()
+		ax_2.plot(self.__generation_list, self.__average_fitness_per_generation_list)
+		ax_2.set_xlabel('Generation')
+		ax_2.set_ylabel('Fitness')
+		ax_2.set_title('Mutants Average Fitness')
+		# Average Fitness over Generations
+		ax_3.clear()
+		ax_3.plot(self.__generation_list, self.__average_fitness_over_generations_list)
+		ax_3.set_xlabel('Generation')
+		ax_3.set_ylabel('Fitness')
+		ax_3.set_title('Average of Mutants Average Fitness\n(Last 100 Generations)')
+
+	def save(self, filename):
+		del self.env
+		with open(filename, 'wb') as file:
+			pickle.dump(self, file)
