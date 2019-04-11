@@ -9,7 +9,7 @@ Train a 2-legged robot to walk in [Gym](https://gym.openai.com/) environment by 
 
 ## Prerequisites
 
-You are on macOS with `python3` installed.
+You have `python3` installed.
 
 ## Installing
 
